@@ -1,38 +1,150 @@
+import { Navbar, Nav, Container, Form, FormControl } from "react-bootstrap";
+import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import ListGroup from "react-bootstrap/ListGroup";
+import * as Icon from "react-bootstrap-icons";
 
-import Nav from 'react-bootstrap/Nav';
-import Navbar from 'react-bootstrap/Navbar';
+//using sample data
+import filmData from "../../../../sample_fillm_data.json";
+
+export default function NavigationBar() {
+  const [searchedItem, setSearchedItem] = useState("");
+  const [showSearchInput, setShowSearchInput] = useState(false);
+
+  function handleSearch(e) {
+    setSearchedItem(e.target.value);
+  }
+
+  useEffect(() => {
+    return () => {
+      setSearchedItem("");
+    };
+  }, []);
+
+  // Filter movies based on search term
+  const filteredMovies = filmData.filter((movie) =>
+    movie.title.toLowerCase().includes(searchedItem.toLowerCase())
+  );
+
+  function handleNavigation(movie) {
+    console.log(" object clicked----", movie);
+  }
+
+  useEffect(() => {
+    if (!showSearchInput) {
+      // Clear the search input when hiding it
+      setSearchedItem("");
+    }
+  }, [showSearchInput]);
+
+  function toggleSearchInput() {
+    setShowSearchInput(!showSearchInput);
+  }
+
+  return (
+    <>
+
+    <Container fluid='true' className="border border-2 bg-dark">
+
+    <Navbar variant="dark" expand="lg">
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+
+        <Container className="justify-content-sm-center justify-content-between px-2 py-0 col-10 bg-secondary">
+          {!showSearchInput ? (
+            <>
+              <Navbar.Brand as={Link} to="/">
+                <Container className="text-dark fw-bolder bg-warning rounded py-1">IMDb</Container>
+              </Navbar.Brand>
+
+              <Form className="d-flex col-lg-8 col-sm-10 d-sm-block d-none">
+                <FormControl
+                  type="text"
+                  placeholder="Search"
+                  className="mr-2"
+                  value={searchedItem}
+                  onChange={handleSearch}
+                />
+              </Form>
+
+              <Icon.Search
+                size={36}
+                className="mr-2 d-sm-none me-0 border border-3 "
+                onClick={() => {
+                  toggleSearchInput();
+                  console.log(showSearchInput);
+                }}
+              />
+
+              <Navbar.Collapse className="justify-content-evenly">
+                <Nav>
+                  <Nav.Link as={Link} to="/watchlist" className="fw-bold text-light">
+                    WatchList
+                  </Nav.Link>
+                </Nav>
+                <Nav>
+                  <Nav.Link as={Link} to="/signin" className="fw-bold text-light">
+                    Sign In
+                  </Nav.Link>
+                </Nav>
+              </Navbar.Collapse>
+            </>
+          ) : (
+            <>
+              <Form className="d-flex col-11">
+                <FormControl
+                  type="text"
+                  placeholder="Search"
+                  className="ms-2"
+                  value={searchedItem}
+                  onChange={handleSearch}
+                />
+              </Form>
+              <Icon.XLg
+                className="mx-sm-2"
+                onClick={() => {
+                  toggleSearchInput();
+                  setSearchedItem("");
+                }}
+              />
+            </>
+          )}
+        </Container>
+      </Navbar>
 
 
-import { Link } from 'react-router-dom';
 
 
-export default function NavigationBar(){
 
-    return(
-        <>
-        <Navbar className='bg-body-tertiary'>
-        <Navbar.Brand> React Bootstrap</Navbar.Brand>
-
-        <Nav>
-        <Nav.Link as={Link} to='/'>Home..</Nav.Link>
-        <Nav.Link as={Link} to='/watchlist'>watchlist..</Nav.Link>
-        <Nav.Link as={Link} to='/signin'>signin..</Nav.Link>
-
-
-        </Nav>
-
-        </Navbar>
-
-        <Link to='/'> Home</Link>
-        <Link to='/watchlist'>watchlist..</Link>
-        <Link to='/signin'>signin..</Link>
+    </Container>
 
 
 
 
-        
 
 
-        </>
-    )
+      <ListGroup 
+      style={{zIndex:-1}}
+      className="col-sm-9 border border-4 border-light justify-content-center mx-auto">
+        {searchedItem &&
+          filteredMovies.map((movie, index) => (
+            <ListGroup.Item
+            as={Link}
+            to={{
+              pathname: '/detailedpage',
+              state: { movie: movie }
+            }}
+            state={movie}
+              key={index}
+              style={{zIndex:99999999999}}
+              className="col-lg-8 col-12 bg-dark text-light align-self-center"
+              onClick={() => {
+                handleNavigation(movie);
+              }}
+            >
+              {movie.title}
+            </ListGroup.Item>
+          ))}
+      </ListGroup>
+    </>
+  );
 }

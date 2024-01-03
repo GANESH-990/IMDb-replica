@@ -6,8 +6,8 @@ import * as Icon from "react-bootstrap-icons";
 export default function Footer() {
   return (
     <>
-      <footer className="fixed-bottom">
-        <Container className=" col-3 mx-auto">
+      <footer className="">
+        <Container className=" col-lg-3 col-6 mx-auto">
 
             <Row className="my-3 justify-content-center">
                 <Col > <Icon.Tiktok/></Col>
