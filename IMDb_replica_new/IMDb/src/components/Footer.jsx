@@ -3,11 +3,13 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 
 import * as Icon from "react-bootstrap-icons";
+
+import '../css/footer.css'
 export default function Footer() {
   return (
     <>
-      <footer className="">
-        <Container className=" col-lg-3 col-6 mx-auto">
+      <footer  className="footer" >
+        <Container className=" col-lg-3 col-6 mx-auto mb-0"  >
 
             <Row className="my-3 justify-content-center">
                 <Col > <Icon.Tiktok/></Col>
