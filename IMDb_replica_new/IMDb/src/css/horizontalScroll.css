@@ -1,0 +1,24 @@
+.button-contianer {
+    display: flex;
+    justify-content: space-between;
+    color: aqua;
+  }
+  
+  .img-container {
+    display: flex;
+    overflow: hidden;
+    width: 100%;
+    border: 10px solid #ffffff;
+    border-radius: 10px;
+  }
+  
+
+  .customCard{
+    display: inline-block;
+    width: 400px;
+    height: 200px;
+
+    margin: 20px;
+
+    border: 5px solid red;
+  }
