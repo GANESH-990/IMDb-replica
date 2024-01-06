@@ -133,7 +133,6 @@ export default function NavigationBar() {
               className="col-sm-8 col-12 bg-dark text-light align-self-center"
                onClick={() => {
                 setSearchedItem('');
-                toggleSearchInput();
               }}
             >
               {movie.title}
