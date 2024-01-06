@@ -14,14 +14,14 @@ export default function Signin() {
 
   return (
     <div style={{ backgroundColor: "#C6C6C2" }}>
-      <Row className="border border-1 border-info col-9 mx-auto bg-light text-dark py-5">
+      <Row className="border border-1 border-info col-lg-9 mx-auto bg-light text-dark py-5">
         <Col md={6}>
 
 
             {/*  space for API errors e.g.- wrong password */}
 
             
-          <Container className="border border-1 rounded mx-auto col-8 p-3 shadow-sm">
+          <Container className="border border-1 rounded mx-auto col-sm-8  p-3 shadow-sm">
             {!SignInToggle ? (
               <SignInBox toggleFunction={toggleOnClick} />
             ) : (
@@ -30,7 +30,7 @@ export default function Signin() {
           </Container>
         </Col>
 
-        <Col style={{ borderLeft: "1px solid black" }} md={6}>
+        <Col style={{ borderLeft: "1px solid black" }} md={6} className=" my-5 my-md-0">
           <Container>
             <h4 className="fw-bold">Benefits of your free IMDb account</h4>
 
