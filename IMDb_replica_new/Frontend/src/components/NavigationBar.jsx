@@ -9,7 +9,7 @@ import filmData from "../../../../sample_fillm_data.json";
 export default function NavigationBar() {
   const [searchedItem, setSearchedItem] = useState("");
   const [showSearchInput, setShowSearchInput] = useState(false);
-
+  const [isExpanded , setIsExpanded] = useState(false);
   function handleSearch(e) {
     setSearchedItem(e.target.value);
   }
@@ -25,9 +25,11 @@ export default function NavigationBar() {
     movie.title.toLowerCase().includes(searchedItem.toLowerCase())
   );
 
-  function handleNavigation(movie) {
-    console.log(" object clicked----", movie);
+  function toggleSearchInput() {
+    setShowSearchInput(!showSearchInput);
   }
+
+  
 
   useEffect(() => {
     if (!showSearchInput) {
@@ -36,15 +38,13 @@ export default function NavigationBar() {
     }
   }, [showSearchInput]);
 
-  function toggleSearchInput() {
-    setShowSearchInput(!showSearchInput);
-  }
+
 
   return (
     <>
       <Container fluid="true" className="bg-dark mb-2">
-        <Navbar variant="dark" expand="lg">
-          <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar variant="dark" expand="lg" expanded={isExpanded}>
+          <Navbar.Toggle aria-controls="basic-navbar-nav" type="button"  onClick={()=>setIsExpanded(!isExpanded)} onBlur={()=>setIsExpanded(false)} />
 
           <Container className="justify-content-sm-center justify-content-between px-md-2 px-0 py-0 col-10">
             {!showSearchInput ? (
@@ -70,7 +70,6 @@ export default function NavigationBar() {
                   className="mr-2 d-sm-none me-3"
                   onClick={() => {
                     toggleSearchInput();
-                    console.log(showSearchInput);
                   }}
                 />
 
@@ -128,16 +127,13 @@ export default function NavigationBar() {
           filteredMovies.map((movie, index) => (
             <ListGroup.Item
               as={Link}
-              to={{
-                pathname: "/detailedpage",
-                state: { movie: movie },
-              }}
+              to="/detailedpage"
               state={movie}
               key={index}
               className="col-sm-8 col-12 bg-dark text-light align-self-center"
-              onClick={() => {
-                handleNavigation(movie);
+               onClick={() => {
                 setSearchedItem('');
+                toggleSearchInput();
               }}
             >
               {movie.title}
