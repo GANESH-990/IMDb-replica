@@ -2,9 +2,9 @@
 //import filmData from "../../../../sample_fillm_data.json";
 
 import HorizontalScroll from "./HorizontalScroll";
-
 import { useState, useEffect } from "react";
 import axios from "axios";
+
 
 export default function Home() {
   const [movieData, setMovieData] = useState(null);
@@ -40,6 +40,10 @@ export default function Home() {
 
   return (
     <>
+
+
+
+
       {movieData !== null && movieData !== undefined &&  actorData !== null && actorData !== undefined && (
         <div>
           <h3 className=" col-11  mx-auto px-3">top picks</h3>

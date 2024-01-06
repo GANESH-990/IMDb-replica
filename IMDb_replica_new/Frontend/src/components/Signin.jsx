@@ -128,15 +128,15 @@ function SignUpBox({ toggleFunction }) {
         <Form.Group className="my-1">
           <Form.Label className="fw-bold">password</Form.Label>
           <Form.Control
-            className="border border-secondary shadow-sm"
+            className="border border-secondary shadow-sm "
             type="password"
           />
         </Form.Group>
 
-        <Form.Group className="ms-1 mb-3">
-          <Form.Label className="fw-bold"> Re-enter password</Form.Label>
+        <Form.Group className="my-1 mb-3">
+          <Form.Label className="fw-bold">Re-enter password</Form.Label>
           <Form.Control
-            className="border border-secondary shadow-sm"
+            className="border border-secondary shadow-sm "
             type="password"
           />
         </Form.Group>

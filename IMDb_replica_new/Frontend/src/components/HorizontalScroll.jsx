@@ -3,7 +3,7 @@ import { useRef, useState } from "react";
 import { Container, Card, Button } from "react-bootstrap";
 import "../css/horizontalScroll.css";
 import * as Icon from "react-bootstrap-icons";
-
+import { Link } from "react-router-dom";
 import actData from "../../../../temp_actors.json";
 
 function HorizontalScroll({ movies, actors }) {
@@ -30,6 +30,53 @@ function HorizontalScroll({ movies, actors }) {
     return (
       <div style={{ marginTop: "0", padding: "0", position: "relative" }}>
         <div
+          className=" mx-auto position-absolute"
+          style={{
+            minHeight: "100%",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            zIndex: 2,
+            top:'0%',
+            left:'1%',
+          }}
+        >
+          <Button
+            className="bg-transparent"
+            style={{ border: "none" }}
+            onClick={() => {
+              handleHorizantalScroll(elementRef.current, 10, 500, -10);
+            }}
+            disabled={arrowDisable}
+          >
+            <Icon.CaretLeft size={36} />
+          </Button>
+        </div>
+
+        <div
+          className=" mx-auto position-absolute"
+          style={{
+            minHeight: "100%",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            zIndex: 2,
+            top: "00%",
+            right: "1%",
+          }}
+        >
+          <Button
+            className="bg-transparent"
+            style={{ border: "none" }}
+            onClick={() => {
+              handleHorizantalScroll(elementRef.current, 10, 500, 10);
+            }}
+          >
+            <Icon.CaretRight size={36} />
+          </Button>
+        </div>
+
+        <div
           className=" mx-auto position-absolute top-50 start-50 translate-middle"
           style={{
             minHeight: "100%",
@@ -39,7 +86,9 @@ function HorizontalScroll({ movies, actors }) {
             justifyContent: "space-between",
             alignItems: "center",
 
-            zIndex: 1,
+            border: "10px solid red",
+
+            zIndex: -1,
           }}
         >
           <Button
@@ -65,7 +114,7 @@ function HorizontalScroll({ movies, actors }) {
 
         <div
           className=" col-12 col-sm-10 col-lg-11 mx-auto  d-flex  overflow-hidden"
-          style={{ padding: "0" }}
+          style={{ padding: "0", zIndex: "2" }}
           ref={elementRef}
         >
           {movies.map((movie, index) => (
@@ -95,7 +144,16 @@ function HorizontalScroll({ movies, actors }) {
                   <Card.Text>
                     <Icon.StarFill color="red" /> {movie.IMDB_rating}
                   </Card.Text>
-                  <Card.Title>{movie.title}</Card.Title>
+
+                  <Link
+                    to="/detailedpage"
+                    state={movie}
+                    className="text-decoration-none"
+                  >
+                    <Card.Title className="text-light">
+                      {movie.title}
+                    </Card.Title>
+                  </Link>
                 </Card.Body>
 
                 <Card.Footer className="d-grid mb-2">
