@@ -11,7 +11,7 @@ export default function Home() {
   const [actorData, setActorData] = useState(null);
 
   async function getMovies() {
-    const URL = "http://localhost:8080/api/movies";
+    const URL = "https://imdb-replica.onrender.com/api/movies";
 
     axios
       .get(URL)
@@ -22,13 +22,12 @@ export default function Home() {
   }
 
   async function getActors() {
-    const URL = "http://localhost:8080/api/actors";
+    const URL = "https://imdb-replica.onrender.com/api/actors";
 
     axios
       .get(URL)
       .then((res) => {
         setActorData(res.data);
-        console.log(res.data);
       })
       .catch((e) => console.log(e));
   }

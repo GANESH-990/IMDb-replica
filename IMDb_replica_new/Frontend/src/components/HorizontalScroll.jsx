@@ -4,7 +4,6 @@ import { Container, Card, Button } from "react-bootstrap";
 import "../css/horizontalScroll.css";
 import * as Icon from "react-bootstrap-icons";
 import { Link } from "react-router-dom";
-import actData from "../../../../temp_actors.json";
 
 function HorizontalScroll({ movies, actors }) {
   const elementRef = useRef(null);
