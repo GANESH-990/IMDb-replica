@@ -1,15 +1,37 @@
-import { Navbar, Nav, Container, Form, FormControl } from "react-bootstrap";
+import {
+  Navbar,
+  Nav,
+  Container,
+  Form,
+  FormControl,
+  Col,
+} from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import ListGroup from "react-bootstrap/ListGroup";
 import * as Icon from "react-bootstrap-icons";
-//using sample data
-import filmData from "../../../../sample_fillm_data.json";
+import axios from "axios";
 
 export default function NavigationBar() {
   const [searchedItem, setSearchedItem] = useState("");
   const [showSearchInput, setShowSearchInput] = useState(false);
-  const [isExpanded , setIsExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [movieData, setMovieData] = useState(null);
+  const [filteredMovies, setFilteredMovies] = useState(null);
+  const navigate = useNavigate();
+
+  async function getMovies() {
+    const URL = "https://imdb-replica.onrender.com/api/movies";
+
+    await axios
+      .get(URL)
+      .then((res) => {
+        setMovieData(res.data);
+      })
+      .catch((e) => console.log(e));
+  }
+
   function handleSearch(e) {
     setSearchedItem(e.target.value);
   }
@@ -20,16 +42,26 @@ export default function NavigationBar() {
     };
   }, []);
 
-  // Filter movies based on search term
-  const filteredMovies = filmData.filter((movie) =>
-    movie.title.toLowerCase().includes(searchedItem.toLowerCase())
-  );
+
 
   function toggleSearchInput() {
     setShowSearchInput(!showSearchInput);
   }
 
-  
+  useEffect(() => {
+    getMovies();
+  }, []);
+
+
+  useEffect(()=>{
+    if (movieData !== null && movieData !== undefined) {
+      // Filter movies based on search term
+      const filterMovies = movieData.filter((movie) =>
+        movie.title.toLowerCase().includes(searchedItem.toLowerCase())
+      );
+      setFilteredMovies(filterMovies);
+    }
+  },[movieData])
 
   useEffect(() => {
     if (!showSearchInput) {
@@ -38,19 +70,27 @@ export default function NavigationBar() {
     }
   }, [showSearchInput]);
 
-
-
   return (
     <>
-      <Container fluid="true" className="bg-dark mb-2">
+      <Container fluid="true" className="bg-dark mb-2 ">
         <Navbar variant="dark" expand="lg" expanded={isExpanded}>
-          <Navbar.Toggle aria-controls="basic-navbar-nav" type="button"  onClick={()=>setIsExpanded(!isExpanded)} onBlur={()=>setIsExpanded(false)} />
+          <Navbar.Toggle
+            aria-controls="basic-navbar-nav"
+            type="button"
+            onClick={() => setIsExpanded(!isExpanded)}
+            onBlur={() => setIsExpanded(false)}
+          />
 
           <Container className="justify-content-sm-center justify-content-between px-md-2 px-0 py-0 col-10">
             {!showSearchInput ? (
               <>
                 <Navbar.Brand as={Link} to="/">
-                  <Container className="text-dark fw-bolder bg-warning rounded py-1 px-2">
+                  <Container
+                    className="text-dark fw-bolder bg-warning rounded py-1 px-2"
+                    onClick={() => {
+                      setIsExpanded(false);
+                    }}
+                  >
                     IMDb
                   </Container>
                 </Navbar.Brand>
@@ -70,28 +110,34 @@ export default function NavigationBar() {
                   className="mr-2 d-sm-none me-3"
                   onClick={() => {
                     toggleSearchInput();
+                    setIsExpanded(false);
                   }}
                 />
 
                 <Navbar.Collapse className="justify-content-evenly">
-                  <Nav>
-                    <Nav.Link
-                      as={Link}
-                      to="/watchlist"
-                      className="fw-bold text-light"
-                    >
-                      WatchList
-                    </Nav.Link>
-                  </Nav>
-                  <Nav>
-                    <Nav.Link
-                      as={Link}
-                      to="/signin"
-                      className="fw-bold text-light"
-                    >
-                      Sign In
-                    </Nav.Link>
-                  </Nav>
+                  <div
+                    className="fw-bold text-light my-2"
+                    onClick={() => {
+                      navigate("/watchlist");
+                      setIsExpanded(false);
+                      console.log("button clicked");
+                    }}
+                  >
+                    WatchList
+                  </div>
+
+                  <div
+                    className="fw-bold text-light my-2"
+                    onClick={() => {
+                      navigate("/signin");
+                      setIsExpanded(false);
+                      console.log("sign in button clicked");
+                    }}
+                  >
+                    Sign In
+                  </div>
+
+                  {/* <Container className="border border-info">__________</Container> */}
                 </Navbar.Collapse>
               </>
             ) : (
@@ -106,7 +152,7 @@ export default function NavigationBar() {
                   />
                 </Form>
                 <Icon.XLg
-                size={20}
+                  size={20}
                   className="mx-auto"
                   onClick={() => {
                     toggleSearchInput();
@@ -120,9 +166,9 @@ export default function NavigationBar() {
       </Container>
 
       <ListGroup
-          style={{ zIndex: 1, position:'absolute', top:"10px"}}
+        style={{ zIndex: 1, position: "absolute", top: "10px" }}
         className="col-sm-10  col-12 justify-content-center mt-5"
-        >
+      >
         {searchedItem &&
           filteredMovies.map((movie, index) => (
             <ListGroup.Item
@@ -131,16 +177,14 @@ export default function NavigationBar() {
               state={movie}
               key={index}
               className="col-sm-8 col-12 bg-dark text-light align-self-center"
-               onClick={() => {
-                setSearchedItem('');
+              onClick={() => {
+                setSearchedItem("");
               }}
             >
               {movie.title}
             </ListGroup.Item>
           ))}
       </ListGroup>
-
-
     </>
   );
 }
