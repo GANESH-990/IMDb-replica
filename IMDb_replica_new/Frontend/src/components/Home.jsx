@@ -9,6 +9,12 @@ import axios from "axios";
 export default function Home() {
   const [movieData, setMovieData] = useState(null);
   const [actorData, setActorData] = useState(null);
+  const [authoToken , setAuthToken] = useState(null);
+
+  async function checkToken(){
+    const authToken = await localStorage.getItem("authToken");
+            await setAuthToken(authToken);
+    }
 
   async function getMovies() {
     const URL = "https://imdb-replica.onrender.com/api/movies";
@@ -32,10 +38,36 @@ export default function Home() {
       .catch((e) => console.log(e));
   }
 
+
+  // async function addToWatchList(movie , tk){
+
+  //   const URL = 'https://imdb-replica.onrender.com/api/add-to-watchlist'
+
+  //   if(tk !== null || tk !== undefined){
+  //     await axios.post(URL,{
+  //       "title": movie.title
+  //     },{
+  //       headers:{
+  //         Authorization:tk,
+  //     }
+  //     })
+  //     .then(res => console.log(res))
+  //     .catch(error => console.log(error))
+  //     }
+  //   }
+
+
+
   useEffect(() => {
     getMovies();
     getActors();
   }, []);
+
+  useEffect(()=>{
+    checkToken();
+  },[authoToken])
+
+
 
   return (
     <>
@@ -67,10 +99,10 @@ export default function Home() {
             movies={[...movieData].sort(() => Math.random() - 0.5)}
           ></HorizontalScroll>
 
-          <h3 className=" col-11  mx-auto px-3 my-5">Famous People</h3>
+          {/* <h3 className=" col-11  mx-auto px-3 my-5">Famous People</h3>
           <HorizontalScroll
             actors={[...actorData].sort(() => Math.random() - 0.5)}
-          ></HorizontalScroll>
+          ></HorizontalScroll> */}
         </div>
       )}
     </>

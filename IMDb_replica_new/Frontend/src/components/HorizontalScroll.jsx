@@ -1,13 +1,21 @@
 /* eslint-disable react/prop-types */
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Container, Card, Button } from "react-bootstrap";
 import "../css/horizontalScroll.css";
 import * as Icon from "react-bootstrap-icons";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 function HorizontalScroll({ movies, actors }) {
   const elementRef = useRef(null);
   const [arrowDisable, setArrowDisable] = useState(true);
+  const [authoToken , setAuthToken] = useState(null);
+
+
+  async function checkToken(){
+    const authToken = await localStorage.getItem("authToken");
+            await setAuthToken(authToken);
+    }
 
   const handleHorizantalScroll = (element, speed, distance, step) => {
     let scrollAmount = 0;
@@ -24,6 +32,36 @@ function HorizontalScroll({ movies, actors }) {
       }
     }, speed);
   };
+
+
+  async function addToWatchList(movie , tk){
+
+    const URL = 'https://imdb-replica.onrender.com/api/add-to-watchlist'
+
+    if(tk !== null || tk !== undefined){
+      await axios.post(URL,{
+        "movieId": movie._id
+      },{
+        headers:{
+          Authorization:tk,
+      }
+      })
+      .then(res => {
+        console.log(res)
+        window.alert(res.data.message); 
+      })
+      .catch(error => {
+        console.log(error.response.data)
+       
+          window.alert(error.response.data.message); 
+       
+      })
+      }
+    }
+
+  useEffect(()=>{
+    checkToken();
+  },[authoToken])
 
   if (movies) {
     return (
@@ -160,6 +198,11 @@ function HorizontalScroll({ movies, actors }) {
                     as={Button}
                     className="text-primary text-center p-2 rounded "
                     style={{ backgroundColor: "#2C2C2C" }}
+                    onClick={()=>{
+                      addToWatchList(movie,authoToken)
+                    }
+                      
+                    }
                   >
                     <Icon.Plus size={24} />
                     watchlist

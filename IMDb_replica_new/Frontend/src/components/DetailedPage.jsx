@@ -1,11 +1,46 @@
-import { useLocation } from "react-router-dom";
-
+import { useLocation  } from "react-router-dom";
+import axios from "axios";
 import { Container, Row, Col, Button } from "react-bootstrap";
-
+import { useEffect, useState } from "react";
 export default function DetailedPage() {
   const data = useLocation();
   const movie = data.state;
+  const [authoToken , setAuthToken] = useState(null);
 
+  async function checkToken(){
+    const authToken = await localStorage.getItem("authToken");
+            await setAuthToken(authToken);
+    }
+
+  async function addToWatchList(movie , tk){
+
+    const URL = 'https://imdb-replica.onrender.com/api/add-to-watchlist'
+
+    if(tk !== null || tk !== undefined){
+      await axios.post(URL,{
+        "movieId": movie._id
+      },{
+        headers:{
+          Authorization:tk,
+      }
+      })
+      .then(res => {
+        console.log(res)
+        window.alert(res.data.message); 
+      })
+      .catch(error => {
+        console.log(error.response.data)
+       
+          window.alert(error.response.data.message); 
+       
+      })
+      }
+    }
+
+
+    useEffect(()=>{
+      checkToken();
+    },[authoToken])
 
 
   return (
@@ -67,7 +102,10 @@ export default function DetailedPage() {
             </Col>
 
             <Col className="my-5 d-grid">
-              <Button variant="warning">Add to Watchlist</Button>
+              <Button variant="warning"
+              onClick={()=>{
+                addToWatchList(movie,authoToken)
+              }}>Add to Watchlist</Button>
             </Col>
           </Container>
         </Row>
