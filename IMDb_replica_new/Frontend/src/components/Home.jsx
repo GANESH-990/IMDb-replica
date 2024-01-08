@@ -11,6 +11,7 @@ export default function Home() {
   const [actorData, setActorData] = useState(null);
   const [authoToken , setAuthToken] = useState(null);
 
+
   async function checkToken(){
     const authToken = await localStorage.getItem("authToken");
             await setAuthToken(authToken);

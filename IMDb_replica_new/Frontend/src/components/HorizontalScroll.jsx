@@ -5,12 +5,13 @@ import "../css/horizontalScroll.css";
 import * as Icon from "react-bootstrap-icons";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function HorizontalScroll({ movies, actors }) {
   const elementRef = useRef(null);
   const [arrowDisable, setArrowDisable] = useState(true);
   const [authoToken , setAuthToken] = useState(null);
-
+  const navigate = useNavigate();
 
   async function checkToken(){
     const authToken = await localStorage.getItem("authToken");
@@ -38,7 +39,9 @@ function HorizontalScroll({ movies, actors }) {
 
     const URL = 'https://imdb-replica.onrender.com/api/add-to-watchlist'
 
-    if(tk !== null || tk !== undefined){
+    console.log("add to watchlist-----",tk)
+
+    if(tk !== null && tk !== undefined){
       await axios.post(URL,{
         "movieId": movie._id
       },{
@@ -56,6 +59,10 @@ function HorizontalScroll({ movies, actors }) {
           window.alert(error.response.data.message); 
        
       })
+      }
+
+      else{
+        navigate('/signin')
       }
     }
 

@@ -2,10 +2,15 @@ import { useLocation  } from "react-router-dom";
 import axios from "axios";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+
 export default function DetailedPage() {
   const data = useLocation();
   const movie = data.state;
   const [authoToken , setAuthToken] = useState(null);
+  const navigate = useNavigate();
+
 
   async function checkToken(){
     const authToken = await localStorage.getItem("authToken");
@@ -16,7 +21,7 @@ export default function DetailedPage() {
 
     const URL = 'https://imdb-replica.onrender.com/api/add-to-watchlist'
 
-    if(tk !== null || tk !== undefined){
+    if(tk !== null && tk !== undefined){
       await axios.post(URL,{
         "movieId": movie._id
       },{
@@ -35,6 +40,12 @@ export default function DetailedPage() {
        
       })
       }
+
+      else{
+        navigate('/signin')
+      }
+
+      
     }
 
 
